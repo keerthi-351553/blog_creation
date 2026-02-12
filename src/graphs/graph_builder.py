@@ -23,9 +23,29 @@ class GraphBuilder:
         self.graph.add_edge("content_creation", END)
         return self.graph
 
+    def multi_language_blog(self):
+        #Define node object
+        # multi_language_node_obj = MultiLanguageBlogNode(self.llm)
+        """
+        Build a graph based on topic and the language
+        """
+        blog_obj = BlogNode(self.llm)
+
+        # Define Nodes
+        self.graph.add_node("title_creation", blog_obj.title_creation)
+        self.graph.add_node("content_creation", blog_obj.content_creation)
+        self.graph.add_node("language_translation", blog_obj.translation)
+        # Define Edges
+        self.graph.add_edge(START, "title_creation")
+        self.graph.add_edge("title_creation", "content_creation")
+        self.graph.add_edge("content_creation", "language_translation")
+        self.graph.add_edge("language_translation", END)
+        return self.graph
+
     def setup_graph(self, usecase):
         if usecase == "blog_creation":
             self.build_blog()
-
+        if usecase == "multi_language_blog_creation":
+            self.multi_language_blog()
         return self.graph.compile()
 

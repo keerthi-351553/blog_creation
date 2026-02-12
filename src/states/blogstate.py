@@ -8,5 +8,5 @@ class Blog(BaseModel):
 class BlogState(TypedDict):
     topic: str
     blog: Blog
-    current_language: str
+    language: str
 

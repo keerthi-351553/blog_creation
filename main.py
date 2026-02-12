@@ -27,5 +27,23 @@ async def create_blog(request: Request):
 
     return {"data":state}
 
+@app.post("/multiLanguageBlogs")
+async def create_blog(request: Request):
+    data = await request.json()
+    topic = data["topic"]
+    language = data["language"]
+
+    ##Get LLM
+    groqllm = Groqllm()
+    llm=groqllm.get_llm()
+
+    ##Get graph
+    graph_builder=GraphBuilder(llm)
+    if topic:
+        graph=graph_builder.setup_graph(usecase="multi_language_blog_creation")
+        state=graph.invoke({"topic":topic, "language":language})
+
+    return {"data":state}
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
